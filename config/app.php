@@ -186,6 +186,7 @@ return [
          * Package Service Providers...
          */
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        Geocoder\Laravel\Providers\GeocoderService::class,
 
         /*
          * Application Service Providers...

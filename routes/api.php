@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AddressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::controller(AddressController::class)->group(function () {
+    Route::get("addresses/", 'list');
+    Route::post("addresses/", 'create');
+    Route::patch("addresses/{id}", 'update');
+    Route::delete("addresses/{id}", 'delete');
+    Route::get("addresses/{id}", 'retrieve');
 });
 
-//Route::controller(Controller::class)->group(function () {
-////    Route::get("users/", 'index')->middleware('auth');
-//    Route::get("users/", 'index');
-//});
