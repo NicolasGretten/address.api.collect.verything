@@ -7,6 +7,7 @@ use App\Traits\FiltersTrait;
 use App\Traits\IdTrait;
 use App\Traits\JwtTrait;
 use App\Traits\PaginationTrait;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\JsonEncodingException;
@@ -50,6 +51,7 @@ class AddressController extends Controller
             return response()->json($address, 200);
         }
         catch(ValidationException | ModelNotFoundException | Exception $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), 409);
         }
     }
@@ -72,7 +74,7 @@ class AddressController extends Controller
     public function list(Request $request): JsonResponse
     {
         try {
-//            $this->validate($request, [
+//            $request->validate([
 //                'limit'         => 'int|required_with:page',
 //                'page'          => 'int|required_with:limit',
 //                'items_id'      => 'json'
@@ -85,6 +87,7 @@ class AddressController extends Controller
             return response()->json($resultSet->get(), 200, ['pagination' => $this->pagination]);
         }
         catch(ValidationException | ModelNotFoundException | Exception $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), 409);
         }
     }
@@ -110,7 +113,7 @@ class AddressController extends Controller
     public function create(Request $request): JsonResponse
     {
         try {
-            $this->validate($request, [
+            $request->validate([
                 'title'                     => 'required|string',
                 'addressLine1'            => 'required|string',
                 'addressLine2'            => 'string',
@@ -142,12 +145,15 @@ class AddressController extends Controller
             return response()->json($address->fresh(), 201);
         }
         catch(JsonEncodingException $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), $e->getCode());
         }
         catch(ValidationException $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), 409);
         }
         catch(Exception $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), 500);
         }
     }
@@ -176,7 +182,7 @@ class AddressController extends Controller
     public function update(Request $request): JsonResponse
     {
         try {
-            $this->validate($request, [
+            $request->validate([
                 'title'                     => 'required|string',
                 'addressLine1'            => 'required|string',
                 'addressLine2'            => 'string',
@@ -212,12 +218,15 @@ class AddressController extends Controller
             return response()->json($address, 200);
         }
         catch(ModelNotFoundException | JsonEncodingException $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), $e->getCode());
         }
         catch(ValidationException $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), 409);
         }
         catch(Exception $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), 500);
         }
     }
@@ -266,15 +275,19 @@ class AddressController extends Controller
             return response()->json($address->fresh(), 200);
         }
         catch(ModelNotFoundException $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), $e->getCode());
         }
         catch(ValidationException $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), 409);
         }
         catch(AuthenticationException $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), 403);
         }
         catch(Exception $e) {
+            Bugsnag::notifyException($e);
             return response()->json($e->getMessage(), 500);
         }
     }
