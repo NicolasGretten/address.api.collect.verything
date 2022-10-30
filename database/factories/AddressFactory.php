@@ -19,9 +19,9 @@ class AddressFactory extends Factory
     {
         return [
             'title' => fake()->name(),
-            'addressLine1' => fake()->streetAddress(),
-            'addressLine2' => null,
-            'zipCode' => fake()->postcode(), // password
+            'address_line_1' => fake()->streetAddress(),
+            'address_line_2' => null,
+            'zip_code' => fake()->postcode(), // password
             'city' => fake()->city(),
             'country' => fake()->country(),
             'latitude' => fake()->latitude(),

@@ -19,6 +19,9 @@ use Illuminate\Validation\ValidationException;
 
 class AddressController extends Controller
 {
+    /**
+     * @OA\Info(title="Address API Collect&Verything", version="0.1")
+     */
     use JWTTrait, FiltersTrait, PaginationTrait, IdTrait;
 
     /**
@@ -100,9 +103,9 @@ class AddressController extends Controller
      *      summary="Post a new address",
      *      description="Create a new address",
      *      @OA\Parameter(name="title", description="Address title", required=true, in="query"),
-     *      @OA\Parameter(name="addressLine1", description="Address line 1", required=true, in="query"),
-     *      @OA\Parameter(name="addressLine2", description="Address line 2", in="query"),
-     *      @OA\Parameter(name="zipCode", description="Zip code", required=true, in="query"),
+     *      @OA\Parameter(name="address_line_1", description="Address line 1", required=true, in="query"),
+     *      @OA\Parameter(name="address_line_2", description="Address line 2", in="query"),
+     *      @OA\Parameter(name="zip_code", description="Zip code", required=true, in="query"),
      *      @OA\Parameter(name="city", description="City", required=true, in="query"),
      *      @OA\Parameter(name="country", description="Address country", required=true, in="query"),
      *      @OA\Response(response=201,description="Account created"),
@@ -115,24 +118,23 @@ class AddressController extends Controller
         try {
             $request->validate([
                 'title'                     => 'required|string',
-                'addressLine1'            => 'required|string',
-                'addressLine2'            => 'string',
-                'zipCode'                  => 'required|string',
+                'address_line_1'            => 'required|string',
+                'address_line_2'            => 'string',
+                'zip_code'                  => 'required|string',
                 'city'                      => 'required|string',
-                'state'                     => 'string',
                 'country'                   => 'required|string',
             ]);
 
             DB::beginTransaction();
 
-            $geocoding = app('geocoder')->geocode($request->input('addressLine1').', '.$request->input('zipCode').''.$request->input('city').''.$request->input('country'))->get()->first();
+            $geocoding = app('geocoder')->geocode($request->input('address_line_1').', '.$request->input('zip_code').''.$request->input('city').''.$request->input('country'))->get()->first();
 
             $address = new Address();
             $address->id                        = $this->generateId('address', $address);
             $address->title                     = $request->input('title');
-            $address->addressLine1            = $request->input('addressLine1');
-            $address->addressLine2            = $request->input('addressLine2');
-            $address->zipCode                  = $request->input('zipCode');
+            $address->address_line_1            = $request->input('address_line_1');
+            $address->address_line_2            = $request->input('address_line_2');
+            $address->zip_code                  = $request->input('zip_code');
             $address->city                      = $request->input('city');
             $address->country                   = $request->input('country');
             $address->latitude                  = $geocoding->getCoordinates()->getLatitude();
@@ -165,10 +167,10 @@ class AddressController extends Controller
      *      tags={"Addresses"},
      *      summary="Patch a address",
      *      description="Update an address",
-     *      *      @OA\Parameter(name="title", description="Address title", in="query"),
-     *      @OA\Parameter(name="addressLine1", description="Address line 1", in="query"),
-     *      @OA\Parameter(name="addressLine2", description="Address line 2", in="query"),
-     *      @OA\Parameter(name="zipCode", description="Zip code", in="query"),
+     *      @OA\Parameter(name="title", description="Address title", in="query"),
+     *      @OA\Parameter(name="address_line_1", description="Address line 1", in="query"),
+     *      @OA\Parameter(name="address_line_2", description="Address line 2", in="query"),
+     *      @OA\Parameter(name="zip_code", description="Zip code", in="query"),
      *      @OA\Parameter(name="city", description="City", in="query"),
      *      @OA\Parameter(name="country", description="Address country", in="query"),
      *      @OA\Response(
@@ -184,9 +186,9 @@ class AddressController extends Controller
         try {
             $request->validate([
                 'title'                     => 'required|string',
-                'addressLine1'            => 'required|string',
-                'addressLine2'            => 'string',
-                'zipCode'                  => 'required|string',
+                'address_line_1'            => 'required|string',
+                'address_line_2'            => 'string',
+                'zip_code'                  => 'required|string',
                 'city'                      => 'required|string',
                 'country'                   => 'required|string',
             ]);
@@ -200,13 +202,13 @@ class AddressController extends Controller
             }
 
             $address->title                     = $request->input('title', $address->getOriginal('title'));
-            $address->addressLine1            = $request->input('addressLine1', $address->getOriginal('addressLine1'));
-            $address->addressLine2            = $request->input('addressLine2', $address->getOriginal('addressLine2'));
-            $address->zipCode                  = $request->input('zipCode', $address->getOriginal('zipCode'));
+            $address->address_line_1            = $request->input('address_line_1', $address->getOriginal('address_line_1'));
+            $address->address_line_2            = $request->input('address_line_2', $address->getOriginal('address_line_2'));
+            $address->zip_code                  = $request->input('zip_code', $address->getOriginal('zip_code'));
             $address->city                      = $request->input('city', $address->getOriginal('city'));
             $address->country                   = $request->input('country', $address->getOriginal('country'));
 
-            $geocoding = app('geocoder')->geocode($address->addressLine1.', '.$address->zipCode.''.$address->city.''.$address->country)->get()->first();
+            $geocoding = app('geocoder')->geocode($address->address_line_1.', '.$address->zip_code.''.$address->city.''.$address->country)->get()->first();
 
             $address->latitude                  = $geocoding->getCoordinates()->getLatitude();
             $address->longitude                 = $geocoding->getCoordinates()->getLongitude();

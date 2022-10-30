@@ -15,21 +15,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed              latitude
  * @property mixed              longitude
  * @property false|mixed|string id
- * @property mixed addressLine1
+ * @property mixed address_line_1
  * @property mixed state
- * @property mixed zipCode
+ * @property mixed zip_code
  * @property mixed addressLine4
  * @property mixed addressLine3
- * @property mixed addressLine2
+ * @property mixed address_line_2
  */
 class Address extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $dates = ['createdAt, updatedAt, deletedAt'];
-    const DELETED_AT = 'deletedAt';
-    const UPDATED_AT = 'updatedAt';
-    const CREATED_AT = 'createdAt';
+    protected $dates = ['created_at, updated_at, deleted_at'];
     protected $connection = 'data';
     protected $table = 'addresses';
     protected $primaryKey = 'id';

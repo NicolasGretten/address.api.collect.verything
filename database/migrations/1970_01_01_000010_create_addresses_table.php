@@ -16,16 +16,16 @@ class CreateAddressesTable extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('title');
-            $table->string('addressLine1');
-            $table->string('addressLine2')->nullable();
-            $table->string('zipCode');
+            $table->string('address_line_1');
+            $table->string('address_line_2')->nullable();
+            $table->string('zip_code');
             $table->string('city');
             $table->string('country');
             $table->string('latitude');
             $table->string('longitude');
-            $table->timestamp('deletedAt')->nullable();
-            $table->timestamp('updatedAt')->nullable();
-            $table->timestamp('createdAt')->nullable();
+            $table->timestamp('deleted_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->nullable();
         });
     }
 
